@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 4.2.1, created on 2024-12-16 13:02:26
+/* Smarty version 4.2.1, created on 2024-12-24 12:21:40
   from 'C:\xampp\htdocs\biblioteka\app\views\templates\main.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.2.1',
-  'unifunc' => 'content_676016d2b1f000_86959346',
+  'unifunc' => 'content_676a9944570b00_63092490',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b4b02f92f17648c3813bff60f247f4c01537fff0' => 
     array (
       0 => 'C:\\xampp\\htdocs\\biblioteka\\app\\views\\templates\\main.tpl',
-      1 => 1734350546,
+      1 => 1735039299,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_676016d2b1f000_86959346 (Smarty_Internal_Template $_smarty_tpl) {
+function content_676a9944570b00_63092490 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_loadInheritance();
 $_smarty_tpl->inheritance->init($_smarty_tpl, false);
 ?>
@@ -68,7 +68,7 @@ rent">Wypożycz książkę</a></li>
 </a></li>
                     <li><a href="<?php echo $_smarty_tpl->tpl_vars['conf']->value->action_root;?>
 rentHistory">Historia wypożyczeń</a></li>
-                    <?php if ((isset($_SESSION['user']->roles)) && in_array('Bibliotekarz',$_SESSION['user']->roles)) {?>
+                    <?php if ((isset($_SESSION['user']->roleNames)) && (in_array('Bibliotekarz',$_SESSION['user']->roleNames) || in_array('Administrator',$_SESSION['user']->roleNames))) {?>
                         <li class="dropdown">
                             <a href="#" class="dropbtn">Panel Pracownika</a>
                             <div class="dropdown-content">
@@ -94,11 +94,11 @@ registerShow">Rejestracja</a></li>
         
         <div id="main">
             <?php 
-$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1344279808676016d2b1a7e6_67398421', 'top');
+$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_392418777676a994456a156_98678851', 'top');
 ?>
 
             <?php 
-$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1687560057676016d2b1ad56_14604293', 'messages');
+$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1724666017676a994456abd4_83064817', 'messages');
 ?>
 
         </div>
@@ -142,7 +142,7 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1687560057676016d2
                     <h3>Copyright</h3>
                     <ul class="icons alt">
                         <li>&copy; <?php 
-$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_200905892676016d2b1eab0_82912597', 'footer');
+$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1519272080676a9944570490_62317101', 'footer');
 ?>
 . Wszelkie prawa zastrzeżone.</li>
                         <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
@@ -177,12 +177,12 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_200905892676016d2b
     </body>
 </html><?php }
 /* {block 'top'} */
-class Block_1344279808676016d2b1a7e6_67398421 extends Smarty_Internal_Block
+class Block_392418777676a994456a156_98678851 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
   'top' => 
   array (
-    0 => 'Block_1344279808676016d2b1a7e6_67398421',
+    0 => 'Block_392418777676a994456a156_98678851',
   ),
 );
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
@@ -190,12 +190,12 @@ public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
 }
 /* {/block 'top'} */
 /* {block 'messages'} */
-class Block_1687560057676016d2b1ad56_14604293 extends Smarty_Internal_Block
+class Block_1724666017676a994456abd4_83064817 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
   'messages' => 
   array (
-    0 => 'Block_1687560057676016d2b1ad56_14604293',
+    0 => 'Block_1724666017676a994456abd4_83064817',
   ),
 );
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
@@ -224,12 +224,12 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl, 1);?>
 }
 /* {/block 'messages'} */
 /* {block 'footer'} */
-class Block_200905892676016d2b1eab0_82912597 extends Smarty_Internal_Block
+class Block_1519272080676a9944570490_62317101 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
   'footer' => 
   array (
-    0 => 'Block_200905892676016d2b1eab0_82912597',
+    0 => 'Block_1519272080676a9944570490_62317101',
   ),
 );
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {

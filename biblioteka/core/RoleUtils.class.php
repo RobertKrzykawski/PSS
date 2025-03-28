@@ -5,9 +5,12 @@ namespace core;
 class RoleUtils {
 
     public static function addRole($role) {
-        App::getConf()->roles [$role] = true;
+        if (!is_string($role)) {
+            throw new \InvalidArgumentException("Role must be a string. Provided: " . gettype($role));
+        }
+        App::getConf()->roles[$role] = true;
         $_SESSION['_amelia_roles'] = serialize(App::getConf()->roles);
-    }
+    }    
 
     public static function removeRole($role) {
         if (isset(App::getConf()->roles [$role])) {

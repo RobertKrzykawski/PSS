@@ -8,6 +8,7 @@ use core\ParamUtils;
 
 class RentManagementCtrl {
     public function action_employeeRents() {
+        // Fetch filter parameters from the request
         $dateFilter = ParamUtils::getFromRequest('rent_date');
         $rentIdFilter = ParamUtils::getFromRequest('rent_id');
         $surnameFilter = ParamUtils::getFromRequest('users_surname');
@@ -22,13 +23,14 @@ class RentManagementCtrl {
             $conditions['rents.rent_id'] = $rentIdFilter;
         }
         if ($surnameFilter) {
-            $conditions['users.surname[~]'] = $surnameFilter;
+            $conditions['users.surname[~]'] = $surnameFilter; // Partial match
         }
         if ($bookTitleFilter) {
-            $conditions['books.title[~]'] = $bookTitleFilter;
+            $conditions['books.title[~]'] = $bookTitleFilter; // Partial match
         }
 
         try {
+            // Fetch rent records with filters
             $rents = App::getDB()->select("rents", [
                 "[><]books" => ["book_id" => "book_id"],
                 "[><]users" => ["user_id" => "user_id"]
@@ -43,69 +45,76 @@ class RentManagementCtrl {
                 "users.name(user_name)",
                 "users.surname(user_surname)"
             ], $conditions + [
-                "ORDER" => ["rents.return_date" => "DESC"]
+                "ORDER" => ["rents.rent_id" => "DESC"]
             ]);
 
             if (empty($rents)) {
-                Utils::addInfoMessage('Brak wyników dla podanych filtrów.');
+                Utils::addInfoMessage('No results found for the provided filters.');
             }
 
+            // Pass data to the view
             App::getSmarty()->assign('rents', $rents);
             App::getSmarty()->assign('date_filter', $dateFilter);
             App::getSmarty()->assign('rent_id_filter', $rentIdFilter);
             App::getSmarty()->assign('surname_filter', $surnameFilter);
             App::getSmarty()->assign('book_title_filter', $bookTitleFilter);
         } catch (\PDOException $e) {
-            Utils::addErrorMessage('Wystąpił błąd podczas pobierania wypożyczeń.');
+            Utils::addErrorMessage('An error occurred while retrieving rental records.');
             if (App::getConf()->debug) {
                 Utils::addErrorMessage($e->getMessage());
             }
         }
-
+        // Render the view
         App::getSmarty()->display('EmployeeRentView.tpl');
     }
 
     public function action_updateRentStatus() {
-        // Pobierz ID wypożyczenia i nowy status z żądania
-        $rentId = ParamUtils::getFromPost('rent_id');
+        // Retrieve rent ID and new status from the request
+        $rent_id = ParamUtils::getFromPost('rent_id');
         $newStatus = ParamUtils::getFromPost('status');
     
         try {
             if ($newStatus === 'Zwrócone') {
-                // Pobierz ID książki z tabeli wypożyczeń
-                $rent = App::getDB()->get("rents", "*", ["rent_id" => $rentId]);
-                $bookId = $rent['book_id'];
+                // Retrieve rent ID and new status from the request
+                $rent = App::getDB()->get("rents", "*", ["rent_id" => $rent_id]);
+                if (!$rent) {
+                    Utils::addErrorMessage("The specified rental record does not exist.");
+                    App::getRouter()->redirectTo('employeeRents');
+                    return;
+                }
+                $book_id = $rent['book_id'];
 
-                // Zwiększ liczbę dostępnych egzemplarzy
+                // Increment the number of available copies for the book
                 App::getDB()->update("books", [
                     "available_copies[+]" => 1
                 ], [
-                    "book_id" => $bookId
+                    "book_id" => $book_id
                 ]);
             }
 
-            // Ustaw dzisiejszą datę jako "returned_date"
+            // Set the current date as the "returned_date" if applicable
             $currentDate = date('Y-m-d');
             App::getDB()->update("rents", [
                 "returned_date" => $currentDate
             ], [
-                "rent_id" => $rentId
+                "rent_id" => $rent_id
             ]);
 
-            // Zaktualizuj status wypożyczenia
+            // Update the rental status
             App::getDB()->update("rents", [
                 "status" => $newStatus
             ], [
-                "rent_id" => $rentId
+                "rent_id" => $rent_id
             ]);
-            Utils::addInfoMessage('Status wypożyczenia został zaktualizowany.');
+            Utils::addInfoMessage('The rental status has been successfully updated.');
         } catch (\PDOException $e) {
-            Utils::addErrorMessage('Wystąpił błąd podczas aktualizacji statusu wypożyczenia.');
+            Utils::addErrorMessage('An error occurred while updating the rental status.');
             if (App::getConf()->debug) {
                 Utils::addErrorMessage($e->getMessage());
             }
         }
-
+        
+        // Redirect back to the employee rents page
         App::getRouter()->redirectTo('employeeRents');
     }
 }

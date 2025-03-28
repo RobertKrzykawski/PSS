@@ -10,9 +10,10 @@ class CatalogCtrl {
     private $records_per_page = 5;
 
     public function action_catalog() {
-        $page = ParamUtils::getFromRequest('page', false, 'Błędne wywołanie aplikacji');
-        if (!$page) {
-            $page = 1;
+        // Get the current page number from the request
+        $page = ParamUtils::getFromRequest('page', false, 'Invalid application call');
+        if (!$page || $page < 1) {
+            $page = 1; // Default to the first page if no valid page is provided
         }
 
         $offset = ($page - 1) * $this->records_per_page;
@@ -26,9 +27,9 @@ class CatalogCtrl {
             $conditions = [];
             if ($search_query) {
                 if ($search_type == 'title') {
-                    $conditions['books.title[~]'] = "%$search_query%"; // Search by title
+                    $conditions['books.title[~]'] = "%$search_query%"; // Search by partial title
                 } elseif ($search_type == 'author') {
-                    $conditions['books.author[~]'] = "%$search_query%"; // Search by author
+                    $conditions['books.author[~]'] = "%$search_query%"; // Search by partial author name
                 }
             }
 
@@ -42,10 +43,9 @@ class CatalogCtrl {
                 "genres.genre_name",
                 "books.available_copies"
             ], array_merge($conditions, [
-                "ORDER" => ["books.title" => "ASC"],
-                "LIMIT" => $this->records_per_page, // Fetch only X records
-                "OFFSET" => $offset // Ensure correct pagination offset
-            ]));            
+                "ORDER" => ["books.title" => "ASC"], // Sort books alphabetically by title
+                "LIMIT" => [$offset, $this->records_per_page] // Pagination limit
+            ]));
 
             // Fetch the total number of books to calculate total pages
             $total_books = App::getDB()->count("books", $conditions);
@@ -59,8 +59,9 @@ class CatalogCtrl {
             App::getSmarty()->assign('current_page', $page);
             App::getSmarty()->assign('search_query', $search_query);
             App::getSmarty()->assign('search_type', $search_type); // Pass selected search type to the view
+
         } catch (\PDOException $e) {
-            Utils::addErrorMessage('Wystąpił błąd podczas pobierania książek.');
+            Utils::addErrorMessage('An error occurred while retrieving the books.');
             if (App::getConf()->debug) {
                 Utils::addErrorMessage($e->getMessage());
             }

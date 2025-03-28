@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__ . '/../controllers/BookCtrl.php';
-
-$controller = new BookCtrl();
-$controller->showBooks();
-?>
+require_once 'init.php';
+use core\App;
+header("Location: ". App::getConf()->app_url);

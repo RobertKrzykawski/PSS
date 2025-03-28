@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 4.2.1, created on 2024-12-16 12:10:35
+/* Smarty version 4.2.1, created on 2024-12-24 12:29:43
   from 'C:\xampp\htdocs\biblioteka\app\views\UserEditView.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.2.1',
-  'unifunc' => 'content_67600aab7f4e18_56439299',
+  'unifunc' => 'content_676a9b270cf536_11016377',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '05c38466872ea45762f16c7e60521b4f5a63fdfb' => 
     array (
       0 => 'C:\\xampp\\htdocs\\biblioteka\\app\\views\\UserEditView.tpl',
-      1 => 1734347413,
+      1 => 1735039781,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_67600aab7f4e18_56439299 (Smarty_Internal_Template $_smarty_tpl) {
+function content_676a9b270cf536_11016377 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_loadInheritance();
 $_smarty_tpl->inheritance->init($_smarty_tpl, true);
 ?>
 
 <?php 
-$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_212311909567600aab7e9f69_51534482', 'p_description');
+$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_560950462676a9b270c38a1_93065839', 'p_description');
 ?>
 
 <?php 
-$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_156303574067600aab7ea514_59062522', 'top');
+$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1169878164676a9b270c3ec2_69447437', 'top');
 ?>
 
 <?php 
-$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_8528247367600aab7f4b40_57489068', 'footer');
+$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_363408843676a9b270cf243_13943898', 'footer');
 $_smarty_tpl->inheritance->endChild($_smarty_tpl, "main.tpl");
 }
 /* {block 'p_description'} */
-class Block_212311909567600aab7e9f69_51534482 extends Smarty_Internal_Block
+class Block_560950462676a9b270c38a1_93065839 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
   'p_description' => 
   array (
-    0 => 'Block_212311909567600aab7e9f69_51534482',
+    0 => 'Block_560950462676a9b270c38a1_93065839',
   ),
 );
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
@@ -53,12 +53,12 @@ public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
 }
 /* {/block 'p_description'} */
 /* {block 'top'} */
-class Block_156303574067600aab7ea514_59062522 extends Smarty_Internal_Block
+class Block_1169878164676a9b270c3ec2_69447437 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
   'top' => 
   array (
-    0 => 'Block_156303574067600aab7ea514_59062522',
+    0 => 'Block_1169878164676a9b270c3ec2_69447437',
   ),
 );
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
@@ -118,6 +118,7 @@ userSave" method="post">
 
         <label for="role_id">Rola:</label>
         <select id="role_id" name="role_id">
+            <option value="" selected disabled>-- Wybierz rolę --</option>
             <option value="1" <?php if ($_smarty_tpl->tpl_vars['form']->value->role_id == 1) {?>selected<?php }?>>Administrator</option>
             <option value="2" <?php if ($_smarty_tpl->tpl_vars['form']->value->role_id == 2) {?>selected<?php }?>>Bibliotekarz</option>
             <option value="3" <?php if ($_smarty_tpl->tpl_vars['form']->value->role_id == 3) {?>selected<?php }?>>Użytkownik</option>
@@ -125,8 +126,9 @@ userSave" method="post">
 
         <label for="active">Aktywny:</label>
         <select id="active" name="active">
-            <option value="1" <?php if ($_smarty_tpl->tpl_vars['form']->value->active == 1) {?>selected<?php }?>>Tak</option>
-            <option value="0" <?php if ($_smarty_tpl->tpl_vars['form']->value->active == 0) {?>selected<?php }?>>Nie</option>
+            <option value="" selected disabled>-- Wybierz status --</option>
+            <option value="1" <?php if ($_smarty_tpl->tpl_vars['form']->value->active === 1) {?>selected<?php }?>>Tak</option>
+            <option value="0" <?php if ($_smarty_tpl->tpl_vars['form']->value->active === 0) {?>selected<?php }?>>Nie</option>
         </select></br>
         
         <div class="col-12">
@@ -143,12 +145,12 @@ displayUsers">Powrót</a></li>
 }
 /* {/block 'top'} */
 /* {block 'footer'} */
-class Block_8528247367600aab7f4b40_57489068 extends Smarty_Internal_Block
+class Block_363408843676a9b270cf243_13943898 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
   'footer' => 
   array (
-    0 => 'Block_8528247367600aab7f4b40_57489068',
+    0 => 'Block_363408843676a9b270cf243_13943898',
   ),
 );
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {

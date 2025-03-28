@@ -2,6 +2,7 @@
 {block name=p_description}<p>Edytuj</p>{/block}
 {block name=top}
 <section>
+    <h1>Lista Użytkowników</h1>
     {if isset($users) && $users|@count > 0}
         <table>
             <tr>

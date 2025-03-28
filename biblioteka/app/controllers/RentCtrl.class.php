@@ -18,34 +18,35 @@ class RentCtrl {
     public function action_rent() {
         // Check if the user is logged in
         if (!SessionUtils::load("user", true)) {
+            Utils::addErrorMessage("You must be logged in to rent a book.");
             $this->generateView();
             return;
         }
     
-        // Check if this is a POST request (form submission)
+        // Handle form submission via POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($this->validate()) {
                 try {
 
-                    $userId = SessionUtils::load("user", true)->id;
-                    $currentDate = date('Y-m-d');
-                    $nextMonthDate = date('Y-m-d', strtotime('+1 month'));
+                    $user_id = SessionUtils::load("user", true)->user_id; // Get user ID from session
+                    $currentDate = date('Y-m-d'); // Current date
+                    $nextMonthDate = date('Y-m-d', strtotime('+1 month')); // Return date (1 month later)
     
                     // Start transaction
                     App::getDB()->pdo->beginTransaction();
     
                     // Insert the rent record
-                    $rentId = App::getDB()->id();
                     App::getDB()->insert("rents", [
-                        "rent_id" => $rentId,
-                        "user_id" => $userId,
+                        "user_id" => $user_id,
                         "book_id" => $this->form->book_id,
                         "rent_date" => $currentDate,
-                        "return_date" => $nextMonthDate
+                        "return_date" => $nextMonthDate,
+                        "status" => "Wypożyczone"
                     ]);
     
-                    if ($rentId === 0) {
-                        throw new \Exception("Failed to add rent to the database.");
+                    $rent_id = App::getDB()->id(); // Get the ID of the inserted rent record
+                    if ($rent_id === 0) {
+                        throw new \Exception("Failed to add the rental record to the database.");
                     }
     
                     // Update the available_copies for the rented book
@@ -53,7 +54,7 @@ class RentCtrl {
                         "available_copies[-]" => 1
                     ], [
                         "book_id" => $this->form->book_id,
-                        "available_copies[>]" => 0
+                        "available_copies[>]" => 0 // Ensure only books with available copies are updated
                     ]);
     
                     if ($affectedRows === 0) {
@@ -86,7 +87,7 @@ class RentCtrl {
         $this->form->book_id = $_POST['book_id'] ?? null;
     
         if (empty($this->form->book_id)) {
-            Utils::addErrorMessage('All fields are required.');
+            Utils::addErrorMessage('Please select a book to rent.');
             return false;
         }
     
@@ -95,14 +96,19 @@ class RentCtrl {
 
     private function generateView() {
         try {
-            $books = App::getDB()->select("books", ["book_id", "title", "author", "available_copies"]);
-            $currentDate = date('Y-m-d');
-            $nextMonthDate = date('Y-m-d', strtotime('+1 month'));
-            $isLoggedIn = SessionUtils::load("user", true) ? true : false;
+            // Fetch all books with their availability
+            $books = App::getDB()->select("books", [
+                "book_id",
+                "title",
+                "author",
+                "available_copies"
+            ]);
+
+            // Assign necessary data to the view
             App::getSmarty()->assign('books', $books);
-            App::getSmarty()->assign('currentDate', $currentDate);
-            App::getSmarty()->assign('nextMonthDate', $nextMonthDate);
-            App::getSmarty()->assign('isLoggedIn', $isLoggedIn);
+            App::getSmarty()->assign('currentDate', date('Y-m-d'));
+            App::getSmarty()->assign('nextMonthDate', date('Y-m-d', strtotime('+1 month')));
+            App::getSmarty()->assign('isLoggedIn', SessionUtils::load("user", true) ? true : false);
         } catch (\PDOException $e) {
             Utils::addErrorMessage('An error occurred while fetching available books.');
             if (App::getConf()->debug) {

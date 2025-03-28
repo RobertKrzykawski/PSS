@@ -38,6 +38,7 @@
 
         <label for="role_id">Rola:</label>
         <select id="role_id" name="role_id">
+            <option value="" selected disabled>-- Wybierz rolę --</option>
             <option value="1" {if $form->role_id == 1}selected{/if}>Administrator</option>
             <option value="2" {if $form->role_id == 2}selected{/if}>Bibliotekarz</option>
             <option value="3" {if $form->role_id == 3}selected{/if}>Użytkownik</option>
@@ -45,8 +46,9 @@
 
         <label for="active">Aktywny:</label>
         <select id="active" name="active">
-            <option value="1" {if $form->active == 1}selected{/if}>Tak</option>
-            <option value="0" {if $form->active == 0}selected{/if}>Nie</option>
+            <option value="" selected disabled>-- Wybierz status --</option>
+            <option value="1" {if $form->active === 1}selected{/if}>Tak</option>
+            <option value="0" {if $form->active === 0}selected{/if}>Nie</option>
         </select></br>
         
         <div class="col-12">

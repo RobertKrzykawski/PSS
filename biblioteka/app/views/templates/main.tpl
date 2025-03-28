@@ -29,7 +29,7 @@
                     <li><a>Zalogowano jako: 
                         {$smarty.session.user->name} {$smarty.session.user->surname}</a></li>
                     <li><a href="{$conf->action_root}rentHistory">Historia wypożyczeń</a></li>
-                    {if isset($smarty.session.user->roles) && in_array('Bibliotekarz', $smarty.session.user->roles)}
+                    {if isset($smarty.session.user->roleNames) && (in_array('Bibliotekarz', $smarty.session.user->roleNames) || in_array('Administrator', $smarty.session.user->roleNames))}
                         <li class="dropdown">
                             <a href="#" class="dropbtn">Panel Pracownika</a>
                             <div class="dropdown-content">
